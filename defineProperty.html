@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Object.defineProperty</title>
+</head>
+<body>
+兼容
+最后注意下，Object.defineProperty是ES5的属性，大部分场景使用是没问题的， 但在一些场景如IE8以下是使用不到的哈。
+<script>
+  try {
+    throw 2
+  } catch (e) {
+    console.log(e)
+  }
+  // let obj = {
+  //   test: "hello"
+  // }
+  // //对象已有的属性添加特性描述
+  // Object.defineProperty(obj, "test", {
+  //   configurable: true | false,
+  //   enumerable: true | false,
+  //   value: 任意类型的值,
+  //   writable: true | false
+  // });
+  // //对象新添加的属性的特性描述
+  // Object.defineProperty(obj, "newKey", {
+  //   configurable: true | false,
+  //   enumerable: true | false,
+  //   value: 任意类型的值,
+  //   writable: true | false
+  // });
+  let obj = {}
+  //第一种情况：不设置value属性
+  Object.defineProperty(obj, 'newObj', {})
+  console.log(obj)
+  //第二种情况：设置value属性
+  Object.defineProperty(obj, 'newKey', {
+    value: 'newKey'
+  });
+  console.log(obj)
+
+  /**************************************************/
+  let obj1 = {}
+  //第一种情况：writable设置为false，不能重写。
+  Object.defineProperty(obj1, 'newObj', {
+    value: 'hello',
+    writable: false
+  })
+  console.log(obj1)
+  //更改newKey的值
+  obj1.newObj = 'change value'
+  console.log(obj1)
+
+  // 第二种情况：writable设置为true，可以重写
+  Object.defineProperty(obj1, "newKey", {
+    value: "hello",
+    writable: true
+  });
+  //更改newKey的值
+  obj1.newKey = "change value";
+  console.log(obj1)
+
+  /**************************************************/
+  let obj2 = {}
+  //第一种情况：enumerable设置为false，不能被枚举。
+  //通过使用Object.getOwnPropertyDescriptor来查看对象上属性的枚举类型值，具体使用相关示
+  Object.defineProperty(obj2, "newObj0", {
+    value: "hello",
+    writable: true,
+    enumerable: false
+  });
+  Object.defineProperty(obj2, "newKey0", {
+    value: "world",
+    writable: true,
+    enumerable: false
+  });
+  console.log(Object.getOwnPropertyDescriptor(obj2, 'newKey0'));
+  //枚举对象的属性
+  console.log('枚举 start')
+  for (let attr in obj2) {
+    console.log(attr);
+  }
+  console.log('obj2 newKey0 是否可枚举 = ',obj2.propertyIsEnumerable('newKey0'));
+  console.log('枚举 end')
+  //第二种情况：enumerable设置为true，可以被枚举。
+  Object.defineProperty(obj2, "newObj", {
+    value: "hello",
+    writable: false,
+    enumerable: true
+  });
+  Object.defineProperty(obj2, "newKey", {
+    value: "world",
+    writable: false,
+    enumerable: true
+  });
+  console.log('obj2 newKey 是否可枚举 = ',obj2.propertyIsEnumerable('newKey')); // true
+  //枚举对象的属性
+  for (let attr in obj2) {
+    console.log(attr);  //newKey
+  }
+
+  //-----------------测试目标属性是否能被删除------------------------
+  let obj3 = {}
+  let obj4 = {}
+  //第一种情况：configurable设置为false，不能被删除。
+  Object.defineProperty(obj3, "newKey", {
+    value: "hello",
+    writable: false,
+    enumerable: false,
+    configurable: false
+  });
+  //删除属性
+  delete obj3.newKey;
+  console.log(obj3); //hello
+
+  //第二种情况：configurable设置为true，可以被删除。
+  Object.defineProperty(obj4, "newKey", {
+    value: "hello",
+    writable: false,
+    enumerable: false,
+    configurable: true
+  });
+  //删除属性
+  delete obj4.newKey;
+  console.log(obj4.newKey); //undefined
+
+  //-----------------测试是否可以再次修改特性------------------------
+  var obj5 = {}
+  var obj6 = {}
+  //第一种情况：configurable设置为false，不能再次修改特性。
+  Object.defineProperty(obj5,"newKey",{
+    value:"hello",
+    writable:false,
+    enumerable:false,
+    configurable:false
+  });
+
+  //重新修改特性
+  // Object.defineProperty(obj5,"newKey",{
+  //   value:"hello",
+  //   writable:true,
+  //   enumerable:true,
+  //   configurable:true
+  // });
+  // console.log( obj5.newKey ); //报错：Uncaught TypeError: Cannot redefine property: newKey
+
+  //第二种情况：configurable设置为true，可以再次修改特性。
+  Object.defineProperty(obj6,"newKey",{
+    value:"hello",
+    writable:false,
+    enumerable:false,
+    configurable:true
+  });
+
+  //重新修改特性
+  Object.defineProperty(obj6,"newKey",{
+    value:"hello1",
+    writable:true,
+    enumerable:true,
+    configurable:true
+  });
+  console.log( obj6.newKey ); //hello1
+
+  //--------------------除了可以给新定义的属性设置特性，也可以给已有的属性设置特性-----------
+  //定义对象的时候添加的属性，是可删除、可重写、可枚举的。
+  var obj7 = {
+    test:"hello"
+  }
+
+  //改写值
+  obj7.test = 'change value';
+
+  console.log( obj7.test ); //'change value'
+
+  Object.defineProperty(obj7,"test",{
+    writable:false
+  })
+
+
+  //再次改写值
+  obj7.test = 'change value again';
+
+  console.log( obj7.test ); //依然是：'change value'
+
+  //
+  let obj8 = {}
+  Object.defineProperty(obj8, 'sg', {
+    set(value){
+      this.value = value
+    },
+    get(){
+      return 1
+    },
+    // writable: true,
+    enumerable:true,
+    configurable:true
+  })
+  obj8.sg = 2
+  console.log(obj8.sg, obj8.value, obj8)
+  //https://segmentfault.com/a/1190000007434923
+</script>
+</body>
+</html>
