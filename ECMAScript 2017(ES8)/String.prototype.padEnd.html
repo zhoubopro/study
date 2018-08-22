@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>String.prototype.padEnd</title>
+</head>
+<body>
+<script>
+  const cars ={
+    '🚗BMW': '10',
+    '🚘Tesla': '5',
+    '🚖Lamborghini': '0'
+  }
+
+  Object.entries(cars).map(([name, count]) => {
+    //padEnd appends ' -' until the name becomes 20 characters
+    //padStart prepends '0' until the count becomes 3 characters.
+    console.log(`${name.padEnd(20, ' -')} Count: ${count.padStart(3, '0')}`)
+  });
+
+  //Emojis和宽字符使用多个字节来表示，因此可能使用padStart和padEnd的结果并非如你所愿。
+  console.log('heart'.padStart(10, "❤️"));
+
+  //这是因为❤️占有2个字节('\u2764\uFE0F')，而heart本身有5个字节，因此只有5个字节的余地。所以只是追加了2个半的桃心。最后追加的'\u2764'会显示为小黑桃心。
+</script>
+</body>
+</html>

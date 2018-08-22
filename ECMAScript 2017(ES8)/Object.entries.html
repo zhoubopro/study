@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Object.entries</title>
+</head>
+<body>
+<script>
+  const cars = { BMW: 3, BC: 2, FLL: 1 }
+
+  //ES5.1
+  Object.keys(cars).forEach((key) => {
+    console.log('ES5.1', 'key = ', key, ' value = ', cars[key])
+  })
+
+  for (let [key, value] of Object.entries(cars)) {
+    console.log('ES8', 'key = ', key, ' value = ', cars[key])
+  }
+
+  const map1 = new Map()
+  Object.keys(cars).forEach((key) => {
+    map1.set(key, cars[key])
+  })
+  console.log(map1)
+
+  const map2 = new Map(Object.entries(cars))
+  console.log(map2);
+</script>
+</body>
+</html>

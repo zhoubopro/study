@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Object.values</title>
+</head>
+<body>
+<script>
+  const cars = {BMW: 3,BC:2,FLL:1}
+
+  //ECMAScript 2015
+  let values = Object.keys(cars).map((key)=>{
+    return cars[key]
+  })
+  console.log(Object.keys(cars), values);
+
+  let values1 = Object.values(cars)
+  console.log(Object.keys(cars), values1);
+</script>
+</body>
+</html>

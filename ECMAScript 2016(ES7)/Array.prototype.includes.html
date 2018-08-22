@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>includes</title>
+</head>
+<body>
+<script>
+  // ECMAScript 2016(ES7)/ES7
+  //includes是一个Array上很有用的函数，用于快速查找数组中是否包含某个元素。(包括NaN，所以和indexOf不一样)。
+  const arr = [1, 2, 3, 4, NaN, 0, '']
+  // 1、Array.prototype.includes
+  console.log(arr.indexOf(3)) //2
+  console.log(arr.includes(3)) //true
+  console.log(arr.indexOf(NaN));  //-1
+  console.log(arr.includes(NaN)); //true
+  console.log(arr.indexOf(0));  //5
+  console.log(arr.includes(0)); //true
+  console.log(arr.indexOf(''));  //6
+  console.log(arr.includes('')); //true
+
+  // 2、指数函数的中缀形式
+  // 加/减法我们通常都是用其中缀形式，直观易懂。在ECMAScript2016中，我们可以使用**来替代Math.pow。
+  console.log(Math.pow(7, 2)); //49
+  console.log(7**2); //49
+</script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Async-Await</title>
+</head>
+<body>
+Async/Await
+<script>
+
+  /**
+   * 1、迄今为止，我介绍的特性中最有用的就属这个功能了。Async函数可以帮助我们摆脱“回调地狱”，并且整个代码会更加简洁。
+   async关键字告诉JavaScript编译器对于标定的函数要区别对待。当编译器遇到await函数的时候会暂停。它会等到await标定的函数返回的promise。该promise要么得到结果、要么reject。
+   在下面的例子中，getAmount函数调用getUser和getBankBalance两个异步函数。我们可以用promise来实现它，不过用async await更加简洁。
+   */
+  //ES2015 Promise
+  function getAmount(userId) {
+    getUser(userId)
+      .then(getBank)
+      .then(amount => {
+        console.log('getAmount = ', amount)
+      })
+  }
+
+  //ES2017
+  async function getAmount2(userId) {
+    let user = await getUser(userId)
+    let amount = await getBank(user)
+    console.log('getAmount2 = ', amount)
+  }
+
+  getAmount('1')
+  getAmount2('222')
+
+  function getUser(userId) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve('join')
+      }, 1000)
+    })
+  }
+
+  function getBank(user) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (user === 'join') {
+          resolve('$1,000')
+        } else {
+          reject('unknown user')
+        }
+      }, 1000)
+    })
+  }
+
+  /**
+   * async函数返回Promise
+   * 2、如果你想获取一个async函数的结果，你需要使用Promise的then语法。
+   在下面的例子中，我们想用console.log来打印doubleAndAdd的结果，可以使用then语法，将console.log函数作为参数传入。
+   */
+
+  async function doubleAndAdd(a, b) {
+    a = await doubleAfter(a)
+    b = await doubleAfter(b)
+    return a + b
+  }
+
+  function doubleAfter(param) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(param * 2)
+      }, 1000)
+    })
+  }
+
+  doubleAndAdd(1, 2).then(console.log)
+  doubleAndAdd(1, 2).then(res=>{
+    console.log('doubleAndAdd = ',res)
+  });
+
+  /**
+   * 并行处理
+   * 3、在上面的例子中，我们显示地调用了await两次，因为每次都等待了1秒钟，因此总计两秒钟。
+   * 现在，我们可以使用Promise.all函数来让他们并行处理。
+   */
+  async function doubleAndAdd1(a, b) {
+    [a, b] = await Promise.all([doubleAfter(a), doubleAfter(b)])
+    return a + b
+  }
+  doubleAndAdd1(1, 2).then(res=>{
+    console.log('doubleAndAdd1 = ', res)
+  });
+
+  /**
+   * async/await的错误处理
+   * 4、方法1：在函数中使用try-catch
+   */
+  async function doubleAndAdd3(a, b) {
+    try{
+      a = await doubleAfter3(a)
+      b = await doubleAfter3(b)
+    }catch (e){
+      return NaN
+    }
+
+    return a + b
+  }
+
+  doubleAndAdd3('one', 2).then((res)=>{
+    console.log('doubleAndAdd3 = ', res)
+  })
+  doubleAndAdd3(1, 2).then((res)=>{
+    console.log('doubleAndAdd3 = ', res)
+  })
+
+  function doubleAfter3(param) {
+    return new Promise((resolve,reject) => {
+      setTimeout(() => {
+        let val = param * 2
+        console.log('doubleAfter3 = ',val)
+        isNaN(val) ? reject(val): resolve(val)
+      }, 1000)
+    })
+  }
+</script>
+</body>
