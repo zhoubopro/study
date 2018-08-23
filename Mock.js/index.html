@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Mock.js</title>
+  <script src="https://cdn.bootcss.com/jquery/3.3.0/jquery.min.js"></script>
+  <script src="http://mockjs.com/dist/mock.js"></script>
+  <script src="./mock.js"></script>
+
+</head>
+<body>
+<script>
+  // http://mockjs.com/
+  $.ajax({
+    url: 'http://test.com/api/default',
+    type: 'get',
+    dataType: 'json'
+  }).done(function(data, status, xhr) {
+    console.log(JSON.stringify(data, null, 4));
+    document.write('<pre>----------------default start----------------------</pre>');
+    document.write('<pre>'+JSON.stringify(data, null, 4)+'</pre>');
+    document.write('<pre>----------------default end----------------------</pre>');
+  });
+
+  $.ajax({
+    url: 'http://test.com/api/one',
+    type: 'get',
+    dataType: 'json'
+  }).done(function(data, status, xhr) {
+    console.log(JSON.stringify(data, null, 4));
+    document.write('<pre>----------------one start----------------------</pre>');
+    document.write('<pre>'+JSON.stringify(data, null, 4)+'</pre>');
+    document.write('<pre>----------------one end----------------------</pre>');
+  });
+
+  $.ajax({
+    url: 'http://test.com/api/two',
+    type: 'post',
+    dataType: 'json',
+    data: {
+      account: 888,
+      pwd: 'abc123'
+    }
+  }).done(function(data, status, xhr) {
+    console.log(JSON.stringify(data, null, 4));
+    document.write('<pre>----------------two start----------------------</pre>');
+    document.write('<pre>'+JSON.stringify(data, null, 4)+'</pre>');
+    document.write('<pre>----------------two end----------------------</pre>');
+  });
+
+</script>
+</body>
+</html>
